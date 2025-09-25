@@ -1,0 +1,30 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+const int sensorPin = A0;
+const float referenceVoltage = 5.0;
+const int adcResolution = 1023;  // 10-bit ADC
+
+// Adjust this if using a voltage divider, e.g., if voltage divider halves voltage, multiply by 2
+const float voltageDividerRatio = 1.0;  
+
+void setup() {
+  lcd.begin(16, 2, LCD_5x8DOTS);
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Voltage Reader");
+  delay(2000);
+  lcd.clear();
+}
+
+void loop() {
+  int rawValue = analogRead(sensorPin);
+  float voltage = (rawValue * referenceVoltage / adcResolution) * voltageDividerRatio;
+
+  lcd.setCursor(0, 0);
+  lcd.print("Voltage:       ");
+  lcd.setCursor(0, 1);
+  lcd.print(voltage, 2);
+  l
